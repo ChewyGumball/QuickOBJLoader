@@ -1,5 +1,28 @@
 #pragma once
 
+// MIT License
+
+// Copyright (c) 2018 Ben Dunkin
+
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
+
 #include <filesystem>
 #include <optional>
 #include <string>
@@ -204,7 +227,10 @@ namespace QuickOBJLoader {
 struct VertexFormat {
     bool interleaved                           = true;
     uint32_t elementSize                       = 0;
-    uint32_t totalSize                         = 1; //We start this at 1 because we divide by it before the actual size is known
+     // We start this at 1 because we divide by it when calculating the number of vertices in a mesh
+     // before the actual vertex size is known. If it is 0, we will crash, if it is not 0 we get the 
+     // right answer.
+    uint32_t totalSize                         = 1;
     std::optional<uint32_t> positionByteOffset = 0;
     std::optional<uint32_t> normalByteOffset;
     std::optional<uint32_t> textureCoordinatesByteOffset;
@@ -281,6 +307,9 @@ LoadFromString(const std::string_view data) {
                 currentMesh = &result.meshes[meshPartIndex->second];
             }
         } else if(elements[0] == "f") {
+
+            // We can divide by format.totalSize here, even before it is set below because we initialize it to 1.
+            // See definition of VertexFormat.
             IndexType vertexCount = static_cast<IndexType>(
                   currentMesh->vertexData.size() * currentMesh->format.elementSize / currentMesh->format.totalSize);
 
@@ -342,7 +371,8 @@ template <typename VertexType, typename IndexType>
 std::enable_if_t<std::is_floating_point_v<VertexType> && std::is_integral_v<IndexType>, Result<VertexType, IndexType>>
 LoadFromFile(const std::filesystem::path& filename) {
     using namespace QuickOBJLoader::Detail;
-    return LoadFromString<VertexType, IndexType>(ReadFile(filename));
+    std::string data = ReadFile(filename);
+    return LoadFromString<VertexType, IndexType>(data);
 }
 }    // namespace QuickOBJLoader
 
@@ -406,9 +436,7 @@ void SplitFaceIntoBuffer(const std::string_view string,
         const char currentChar = string[current];
         if(currentChar == '/') {
             std::string_view::size_type length = current - start;
-            if(length > 0) {
-                buffer.emplace_back(string.substr(start, length));
-            }
+            buffer.emplace_back(string.substr(start, length));
 
             start = current + 1;
         }
