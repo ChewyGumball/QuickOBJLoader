@@ -9,7 +9,14 @@ A fast, C++17, header only Wavefront OBJ loading library
     - `float` and `double` for vertex elements
     - `uint16_t` and `uint32_t` for index types
 * Single header
-    - `#define QUICK_OBJ_LOADER_IMPLEMENTATION` in a non header file then include the to get the implementation details
+    ```C++
+    //In *one* non header file to 
+    #define QUICK_OBJ_LOADER_IMPLEMENTATION
+    #include "QuickOBJLoader.h"
+
+    //Everywhere else
+    #include "QuickOBJLoader.h"
+    ```
 
 ## Non Features
 * Material definitions
