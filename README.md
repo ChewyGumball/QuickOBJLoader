@@ -10,7 +10,7 @@ A fast, C++17, header only Wavefront OBJ loading library
     - `uint16_t` and `uint32_t` for index types
 * Single header
     ```C++
-    //In *one* non header file to 
+    //In *one* non header file do 
     #define QUICK_OBJ_LOADER_IMPLEMENTATION
     #include "QuickOBJLoader.h"
 
