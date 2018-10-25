@@ -1,4 +1,5 @@
-#pragma once
+#ifndef QUICK_OBJ_LOADER_H
+#define QUICK_OBJ_LOADER_H
 
 // MIT License
 
@@ -375,7 +376,7 @@ LoadFromFile(const std::filesystem::path& filename) {
     return LoadFromString<VertexType, IndexType>(data);
 }
 }    // namespace QuickOBJLoader
-
+#endif
 #ifdef QUICK_OBJ_LOADER_IMPLEMENTATION
 
 #include <fstream>
