@@ -39,7 +39,7 @@ Against [TinyOBJLoader](https://github.com/syoyo/tinyobjloader) version 1.2.0-1 
 |[powerplant.obj](https://casual-effects.com/g3d/data10/index.html#mesh23)|780 MB|7.02 seconds|6.52 seconds|13.62 seconds|12.32 seconds|
 
 ## API
-```
+```C++
 namespace QuickOBJLoader {    
     struct VertexFormat {
         //Whether the vertex properties of a mesh are interleaved or contiguous
