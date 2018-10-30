@@ -458,7 +458,10 @@ namespace QuickOBJLoader {
     }
 }    // namespace QuickOBJLoader
 #endif
+
 #ifdef QUICK_OBJ_LOADER_IMPLEMENTATION
+#ifndef QUICK_OBJ_LOADER_IMPLEMENTATION_EXISTS
+#define QUICK_OBJ_LOADER_IMPLEMENTATION_EXISTS
 
 #include <fstream>
 
@@ -488,8 +491,7 @@ namespace QuickOBJLoader::Detail {
         return consumedCharacters;
     }
 
-    void SplitLineIntoBuffer(const std::string_view string,
-        std::vector<std::string_view>& buffer) {
+    void SplitLineIntoBuffer(const std::string_view string, std::vector<std::string_view>& buffer) {
         buffer.clear();
         std::string_view::size_type start = 0;
         for (std::string_view::size_type current = start; current < string.size(); current++) {
@@ -510,8 +512,7 @@ namespace QuickOBJLoader::Detail {
         }
     }
 
-    void SplitFaceIntoBuffer(const std::string_view string,
-        std::vector<std::string_view>& buffer) {
+    void SplitFaceIntoBuffer(const std::string_view string, std::vector<std::string_view>& buffer) {
         buffer.clear();
         std::string_view::size_type start = 0;
         for (std::string_view::size_type current = start; current < string.size(); current++) {
@@ -568,4 +569,5 @@ namespace QuickOBJLoader::Detail {
         return fileContents;
     }
 }    // namespace QuickOBJLoader::Detail
+#endif
 #endif
